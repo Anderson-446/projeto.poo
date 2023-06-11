@@ -1,0 +1,20 @@
+create schema projetopoo default character set utf8;
+use projetopoo;
+
+create table clientes
+(
+	cpf varchar(11) not null unique,
+    nome varchar(100) not null,
+	constraint clientes_pk primary key (cpf)
+);
+
+create table contas
+(
+	numeroConta int not null auto_increment unique,
+    saldo double not null default 0,
+    estado boolean not null default true,
+    tipo enum('corrente','poupanca') not null,
+    clientes_cpf varchar(11) not null,
+    constraint contas_pk primary key (numeroConta),
+    constraint contas_clientes_fk foreign key (clientes_cpf) references clientes (cpf)
+);
