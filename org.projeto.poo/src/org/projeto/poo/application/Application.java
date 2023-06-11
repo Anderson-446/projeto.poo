@@ -36,40 +36,41 @@ public class Application {
 			
 			switch (opcao) {
 			
-			case 1:
+			case 1: //cadastrar cliente
 				System.out.println("Digite seu nome:");
 				String nome = scanner.nextLine();
 				System.out.println("Digite seu CPF:");
 				String cpf = scanner.nextLine();
-				Cliente cliente = new Cliente (cpf,nome, null);
+				Cliente cliente = new Cliente (cpf,nome);
 				clienteDao.save(cliente);
 				break;
 				
-			case 2:
+			case 2: //listar cliente por cpf
 				System.out.println("Digite seu CPF do cliente:");
 				cpf = scanner.next();
 				
-				cliente = ClienteDAO.findByCpf(cpf);
+				Cliente cli = ClienteDAO.findByCpf(cpf);
 				
-				if (cliente == null) {
+				if (cli == null) {
 					System.err.println("Cliente não faz parte do sistema");
 					break;
 				}
 				System.out.println("|----------------------------------------------------|");
-				System.out.println("|---Cliente selecionado: " + cliente.getNome() + "---|");
+				System.out.println("|---Cliente selecionado: " + cli.getNome() + "---|");
 				System.out.println("|--------O que você gostaria de fazer?" + "----------|");
 				System.out.println("|   Opção 1 - Criar nova conta");
 				System.out.println("|   Opção 2 - Ver informações das contas");
 				System.out.println("|   Opção 3 - Realizar Deposito");
 				System.out.println("|   Opção 4 - Realizar Saque");
 				System.out.println("|   Opção 5 - Realizar Transferencia");
+				System.out.println("|   Opção 6 - Desassociar cliente");
 				
 				opcao = scanner.nextInt();
 				scanner.nextLine();
 			
 				switch (opcao) {
 				
-				case 1:
+				case 1: // cadastrar contas
 					System.out.println("Que tipo de conta gostaria de criar?");
 					System.out.println("1. Criar uma conta corrente");
 					System.out.println("2. Criar uma conta poupança");
@@ -81,20 +82,20 @@ public class Application {
 					
 					switch (opcao) {
 					
-					case 1:
+					case 1: // adicionar Conta Corrente
 						
 						IConta conta = new ContaCorrente("corrente");
-						cliente.adicionarConta(conta);
-						contaDao.save(conta, cliente);
+						cli.adicionarConta(conta);
+						contaDao.save(conta, cli);
 						System.out.println("Conta Corrente criada com sucesso!");
 						
 						break;
 						
-					case 2:
+					case 2: // adicionar Conta Poupança
 						
 						IConta conta2 = new ContaPoupanca("poupanca");
-						cliente.adicionarConta(conta2);
-						contaDao.save(conta2, cliente);
+						cli.adicionarConta(conta2);
+						contaDao.save(conta2, cli);
 						System.out.println("Conta Poupança criada com sucesso!");
 						
 						break;
@@ -106,50 +107,86 @@ public class Application {
 					}
 					
 					
-				case 2:
-					if(cliente.getContas().size() == 0) {
+				case 2: //listar contas
+					if(cli.getContas().size() == 0) {
 						System.err.println("O cliente não possui contas neste sistema");
 					} else {
-						for (IConta c : cliente.getContas()) {
-							System.out.println(c);
+						for (IConta conta : cli.getContas()) {
+							System.out.println(conta);
 						}
 					}
 					
-				case 3:
-					if(cliente.getContas().size() == 0) {
+					break;
+					
+				case 3: //depositar
+					
+					if(cli.getContas().size() == 0) {
 						System.err.println("O cliente não possui contas neste sistema");
+						System.exit(0);
 					} else {
-						for (IConta c : cliente.getContas()) {
+						for (IConta c : cli.getContas()) {
 							System.out.println(c);
 						}	
 					}
 					
-				//	System.out.println("Em qual conta deseja realizar o depósito?");
-				//	int opcaoContaDeposito = 0;
-				//	double valor = 0.0;
-				//	opcaoContaDeposito = scanner.nextInt();
-				//	System.out.println("Insira o valor a ser depositado:");
-				//	valor = scanner.nextDouble();
-				//	IConta temp = ContaDAO.findByNumero(int);
-				//	if (temp != null) {
-				//		temp.depositar(valor);
-						//atualizar valor no banco
+					System.out.println("Em qual conta deseja realizar o depósito?");
+					int opcaoContaDeposito = 0;
+					double valor = 0.0;
+					opcaoContaDeposito = scanner.nextInt();
+					System.out.println("Insira o valor a ser depositado:");
+					valor = scanner.nextDouble();
+					IConta temp = contaDao.findByNumero(opcaoContaDeposito);
+					if (temp != null) {
+						temp.depositar(valor);
+						contaDao.update(temp); //como atualizar??
 					}
 					break;
+					
+				case 4: //sacar
+					
+					if(cli.getContas().size() == 0) {
+						System.err.println("O cliente não possui contas neste sistema");
+						System.exit(0);
+					} else {
+						for (IConta c : cli.getContas()) {
+							System.out.println(c);
+						}	
+					}
+					
+					System.out.println("Em qual conta deseja realizar o saque?");
+					int opcaoContaDeposito1 = 0;
+					double valor1 = 0.0;
+					opcaoContaDeposito1 = scanner.nextInt();
+					System.out.println("Insira o valor a ser sacado:");
+					valor1 = scanner.nextDouble();
+					IConta temp1 = contaDao.findByNumero(opcaoContaDeposito1);
+					if (temp1 != null) {
+						temp1.sacar(valor1);
+						contaDao.update(temp1); //como atualizar??
+					}
+					
+					break;
+					
 				default:
 					System.out.println("Opção Inválida");
 					
-				//case 4:
 					
-				//case 5:
-			
-		
-		//		}
+				case 5:  //transferir
+					
+					break;
+					
+				case 6:  //excluir cliente
+					
+					clienteDao.delete(cli);
+					
+					break;
+				}
+				
 			case 3:
 				System.out.println("Até mais ver");
 				System.exit(0);
 				
-		//	default:
+			default:
 				System.out.println("Opção inválida");
 				break;
 			}	

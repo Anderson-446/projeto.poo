@@ -14,7 +14,7 @@ public class Cliente {
 	public Cliente () {
 	}
 	
-	public Cliente (String cpf, String nome, List<IConta> contas) {
+	public Cliente (String cpf, String nome) {
 		
 		super();
 		this.cpf = cpf;
@@ -73,6 +73,8 @@ public class Cliente {
 	 	else {
 	 		contas.add(c); {
 	 			System.out.println("Conta adicionada com sucesso!");;
+	 			System.out.println(c);
+	 			System.out.println(contas);
 	 		}
 	 	}
 	 		

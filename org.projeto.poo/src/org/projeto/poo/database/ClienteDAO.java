@@ -82,7 +82,7 @@ public class ClienteDAO {
 			pstm.setString(1, cpf);
 			rs = pstm.executeQuery();
 			while(rs.next()) {
-				cliente = new Cliente (rs.getString("cpf"), rs.getString("nome"), null);
+				cliente = new Cliente (rs.getString("cpf"), rs.getString("nome"));
 			}
 			
 		
