@@ -59,16 +59,17 @@ public class ContaDAO {
 		
 	}
 	
-	public void delete(IConta conta) {
+	public void delete(int numeroConta) {
 		
 		String sql = "DELETE FROM contas WHERE numeroConta= ?;";
 		
 		try {
 			
 			PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
-			pstm.setInt(1, conta.getNumeroConta());
+			//pstm.setInt(1,getNumeroConta());
+			pstm.setInt(1, numeroConta);
 			pstm.executeUpdate();
-			
+			System.out.println("Conta excluída com sucesso");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -106,5 +107,43 @@ public class ContaDAO {
 	}
 	public List<IConta> findAll(){
 		return null;
+	}
+	
+
+	public void atualizarContas (Cliente cliente, IConta con) {
+		
+		cliente.getContas().clear(); //limpar o array antes de atualizar
+		String sql = "SELECT * FROM contas WHERE clientes_cpf = ?;";
+		ResultSet rs;
+		
+		
+		try {
+			
+			PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+			pstm.setString(1, cliente.getCpf());
+			rs = pstm.executeQuery();
+			
+			while(rs.next()) {
+				
+				if(con.getTipo() == "corrente") {
+					
+					IConta conta = new ContaCorrente("corrente");
+					cliente.getContas().add(conta);
+				
+				}
+				if (con.getTipo() == "poupanca") {
+				
+					IConta conta = new ContaPoupanca("poupanca");
+					cliente.getContas().add(conta);
+				}
+				
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
 	}
 }

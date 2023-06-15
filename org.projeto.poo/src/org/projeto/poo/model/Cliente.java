@@ -1,9 +1,14 @@
 package org.projeto.poo.model;
 
 import java.util.Objects;
+
+import org.projeto.poo.BD.ConnectionMySQL;
+import org.projeto.poo.database.ClienteDAO;
+import org.projeto.poo.database.ContaDAO;
+
 import java.util.ArrayList;
 import java.util.List;
-
+ 
 
 public class Cliente {
 
@@ -66,16 +71,19 @@ public class Cliente {
 	}
 	
 	 public void adicionarConta (IConta c) {
-	 	
+		 
+		//	ContaDAO contaDao = new ContaDAO(new ConnectionMySQL());
+			
 	 	if(contas.contains(c)) {
 	 		throw new RuntimeException("Conta já associada ao cliente.");
 	 	}
 	 	else {
-	 		contas.add(c); {
-	 			System.out.println("Conta adicionada com sucesso!");;
-	 			System.out.println(c);
-	 			System.out.println(contas);
-	 		}
+	 		
+	 	//	contaDao.save(c, this.cpf);
+	 	//	contaDao.atualizarContas(this.cpf, c);
+	 		this.contas.add(c);
+	 		System.out.println(c);
+	 		//	System.out.println("Conta adicionada com sucesso!");;
 	 	}
 	 		
 	 		
@@ -95,9 +103,16 @@ public class Cliente {
 		 
 	// }
 	 
-	public void balancoDeContas() {
-		 
-	 }
+    public double balancoEntreContas() {
+    	
+		double ValorTotal = 0.0;
+		for (int i = 0; i < contas.size(); i++) {
+			IConta c = contas.get(i);
+			ValorTotal += c.getSaldo();
+		}
 
+		System.out.print("Balanco entre contas: RS" + ValorTotal );
+		return ValorTotal;
+    }
 	
 }

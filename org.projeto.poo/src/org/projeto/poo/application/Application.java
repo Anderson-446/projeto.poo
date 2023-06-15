@@ -87,6 +87,7 @@ public class Application {
 						IConta conta = new ContaCorrente("corrente");
 						cli.adicionarConta(conta);
 						contaDao.save(conta, cli);
+						contaDao.atualizarContas(cli, conta);
 						System.out.println("Conta Corrente criada com sucesso!");
 						
 						break;
@@ -96,6 +97,7 @@ public class Application {
 						IConta conta2 = new ContaPoupanca("poupanca");
 						cli.adicionarConta(conta2);
 						contaDao.save(conta2, cli);
+						contaDao.atualizarContas(cli, conta2);
 						System.out.println("Conta Poupança criada com sucesso!");
 						
 						break;
@@ -107,7 +109,7 @@ public class Application {
 					}
 					
 					
-				case 2: //listar contas
+				case 2: //listar contas //informações das contas
 					if(cli.getContas().size() == 0) {
 						System.err.println("O cliente não possui contas neste sistema");
 					} else {
@@ -116,7 +118,34 @@ public class Application {
 						}
 					}
 					
-					break;
+					System.out.println("Digite o número da ação que deseja executar:");
+					System.out.println("Opção 1 - Excluir conta");
+					System.out.println("Opção 2 - Fazer o balanço das contas");
+					System.out.println("Digite qualquer outro número para sair");
+
+					
+					opcao = scanner.nextInt();
+					scanner.nextLine();
+					
+					switch(opcao) {
+						
+					case 1: //excluir conta
+						System.out.println("Insira o número da conta que deseja excluir:");
+						int numero = 0;
+						numero = scanner.nextInt();
+						contaDao.delete(numero);
+						
+						break;
+						
+					case 2 : //balanço das contas
+						
+						cli.balancoEntreContas();
+						
+						break;
+						
+					}
+					
+				break;
 					
 				case 3: //depositar
 					
