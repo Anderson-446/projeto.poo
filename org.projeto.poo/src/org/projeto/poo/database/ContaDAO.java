@@ -3,6 +3,7 @@ package org.projeto.poo.database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.projeto.poo.BD.ConnectionMySQL;
@@ -105,11 +106,16 @@ public class ContaDAO {
 		return conta;
 		
 	}
-	public List<IConta> findAll(){
+	public List<IConta> findByCpf(){
+		
+		
+		
+		
+		
 		return null;
 	}
 	
-
+	/*
 	public void atualizarContas (Cliente cliente, IConta con) {
 		
 		cliente.getContas().clear(); //limpar o array antes de atualizar
@@ -142,8 +148,40 @@ public class ContaDAO {
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+			
 	}
+	*/
+	
+	public List<String> findContas(String cpf) {
+		
+		List<String> listContas = null;
+		String sql = "SELECT * FROM contas WHERE clientes_cpf = ?;";
+		ResultSet rs;
+		
+		try {
+			
+			PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+			pstm.setString(1, cpf);
+			rs = pstm.executeQuery();
+			listContas = new ArrayList<>();
+			
+			while(rs.next()) {
+				int numeroConta = rs.getInt("numeroConta");
+				float saldo = rs.getFloat("saldo");
+				boolean status = rs.getBoolean("estado");
+				String tipo = rs.getString("tipo");	
+				String dadosConta = "Numero: " + numeroConta + "\n" + "Saldo: R$" + saldo + "\n" + "Status: " + status + "\n" + "Tipo da conta: " + tipo + "\n";
+				listContas.add(dadosConta);
+			}
+			
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+		return listContas;
+	}
+	
 }

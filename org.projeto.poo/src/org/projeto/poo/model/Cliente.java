@@ -111,7 +111,7 @@ public class Cliente {
 			ValorTotal += c.getSaldo();
 		}
 
-		System.out.print("Balanco entre contas: RS" + ValorTotal );
+		System.out.print("Balanco entre contas: RS" + ValorTotal + "\n");
 		return ValorTotal;
     }
 	

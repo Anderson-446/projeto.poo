@@ -29,7 +29,8 @@ public class Application {
 			System.out.println("------------------------------------------------------");
 			System.out.println("|   Opção 1 - Cadastrar-se como cliente |");
 			System.out.println("|   Opção 2 - Já cadastrado(a)? Acesse! |");
-			System.out.println("|   Opção 3 - Sair                      |");
+			System.out.println("|   Opção 3 - Listar todos os clientes  |");
+			System.out.println("|   Opção 4 - Sair                      |");
    
 			int opcao = scanner.nextInt();
 			scanner.nextLine();
@@ -87,8 +88,8 @@ public class Application {
 						IConta conta = new ContaCorrente("corrente");
 						cli.adicionarConta(conta);
 						contaDao.save(conta, cli);
-						contaDao.atualizarContas(cli, conta);
-						System.out.println("Conta Corrente criada com sucesso!");
+					//	contaDao.atualizarContas(cli, conta);
+						System.out.println("Conta Corrente criada com sucesso!" + "\n");
 						
 						break;
 						
@@ -97,8 +98,8 @@ public class Application {
 						IConta conta2 = new ContaPoupanca("poupanca");
 						cli.adicionarConta(conta2);
 						contaDao.save(conta2, cli);
-						contaDao.atualizarContas(cli, conta2);
-						System.out.println("Conta Poupança criada com sucesso!");
+					//	contaDao.atualizarContas(cli, conta2);
+						System.out.println("Conta Poupança criada com sucesso!" + "\n");
 						
 						break;
 						
@@ -110,6 +111,13 @@ public class Application {
 					
 					
 				case 2: //listar contas //informações das contas
+					
+					List<String> listContas = contaDao.findContas(cpf);
+					
+					for(String Lista : listContas) {
+						System.out.println(Lista);
+					}
+					/*
 					if(cli.getContas().size() == 0) {
 						System.err.println("O cliente não possui contas neste sistema");
 					} else {
@@ -117,7 +125,7 @@ public class Application {
 							System.out.println(conta);
 						}
 					}
-					
+					*/
 					System.out.println("Digite o número da ação que deseja executar:");
 					System.out.println("Opção 1 - Excluir conta");
 					System.out.println("Opção 2 - Fazer o balanço das contas");
@@ -208,10 +216,19 @@ public class Application {
 					
 					clienteDao.delete(cli);
 					
-					break;
+					break;	
 				}
 				
-			case 3:
+			case 3: //Listar todos os clientes
+				
+				List<String> clientes = clienteDao.findAll();
+				
+				for(String Lista : clientes) {
+					System.out.println(Lista);
+				}
+				
+				
+			case 4:
 				System.out.println("Até mais ver");
 				System.exit(0);
 				

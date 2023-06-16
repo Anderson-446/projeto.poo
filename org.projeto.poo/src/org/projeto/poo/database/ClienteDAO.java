@@ -1,8 +1,11 @@
 package org.projeto.poo.database;
 
+import java.util.Objects;
 import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.projeto.poo.BD.ConnectionMySQL;
@@ -94,8 +97,29 @@ public class ClienteDAO {
 		return cliente;
 	}
 	
-	public List<Cliente> findAll() {
-		return null;
+	public List<String> findAll() {
+			
+		List<String> clientList = new ArrayList<>();
+		String sql = "SELECT * FROM clientes;";
+		ResultSet rs;
+		
+		try {
+			
+			PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+			rs = pstm.executeQuery();
+			
+			while (rs.next()) {
+				String clienteCpf = rs.getString("cpf");
+				String clienteNome = rs.getString("nome");
+				String dadosCliente = "Nome: " + clienteNome + "\n" + "CPF: " + clienteCpf +"\n";
+				clientList.add(dadosCliente);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return clientList;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package org.projeto.poo.model;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class ContaCorrente implements IConta {
@@ -70,6 +71,23 @@ public class ContaCorrente implements IConta {
 	
 
 	//MÉTODOS
+
+
+	public int hashCode() {
+		return Objects.hash(numeroConta, tipo);
+	}
+
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ContaCorrente other = (ContaCorrente) obj;
+		return numeroConta == other.numeroConta && Objects.equals(tipo, other.tipo);
+	}
 
 	public String toString() {
 		return "ContaCorrente [numeroConta=" + numeroConta + ", saldo=" + saldo + ", status=" + status + ", tipo="
