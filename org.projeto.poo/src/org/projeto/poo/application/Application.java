@@ -147,7 +147,7 @@ public class Application {
 						
 					case 2 : //balanço das contas
 						
-						cli.balancoEntreContas();
+						contaDao.balanco(cli);
 						
 						break;
 						
@@ -155,60 +155,49 @@ public class Application {
 					
 				break;
 					
-				case 3: //depositar
-					
-					if(cli.getContas().size() == 0) {
-						System.err.println("O cliente não possui contas neste sistema");
-						System.exit(0);
-					} else {
-						for (IConta c : cli.getContas()) {
-							System.out.println(c);
-						}	
-					}
+				case 3: //depositar						
 					
 					System.out.println("Em qual conta deseja realizar o depósito?");
-					int opcaoContaDeposito = 0;
+					int numeroConta = 0;
 					double valor = 0.0;
-					opcaoContaDeposito = scanner.nextInt();
+					numeroConta = scanner.nextInt();
 					System.out.println("Insira o valor a ser depositado:");
 					valor = scanner.nextDouble();
-					IConta temp = contaDao.findByNumero(opcaoContaDeposito);
-					if (temp != null) {
-						temp.depositar(valor);
-						contaDao.update(temp); //como atualizar??
-					}
+					contaDao.deposito(numeroConta, valor);
+					System.out.println("Depósito realizado com sucesso!");
 					break;
+					
 					
 				case 4: //sacar
 					
-					if(cli.getContas().size() == 0) {
-						System.err.println("O cliente não possui contas neste sistema");
-						System.exit(0);
-					} else {
-						for (IConta c : cli.getContas()) {
-							System.out.println(c);
-						}	
-					}
-					
 					System.out.println("Em qual conta deseja realizar o saque?");
-					int opcaoContaDeposito1 = 0;
-					double valor1 = 0.0;
-					opcaoContaDeposito1 = scanner.nextInt();
+					int numeroConta2 = 0;
+					double valor2 = 0.0;
+					numeroConta2 = scanner.nextInt();
 					System.out.println("Insira o valor a ser sacado:");
-					valor1 = scanner.nextDouble();
-					IConta temp1 = contaDao.findByNumero(opcaoContaDeposito1);
-					if (temp1 != null) {
-						temp1.sacar(valor1);
-						contaDao.update(temp1); //como atualizar??
-					}
-					
+					valor2 = scanner.nextDouble();
+					contaDao.saque(numeroConta2, valor2);
+					System.out.println("Saque realizado com sucesso!");
 					break;
 					
 				default:
-					System.out.println("Opção Inválida");
+					System.err.println("Opção Inválida");
 					
 					
 				case 5:  //transferir
+					
+					System.out.println("Gostaria de realizar uma transferência?");
+					System.out.println("Insira a conta de origem:");
+					int contaOrigem = 0;
+					contaOrigem = scanner.nextInt();
+					System.out.println("Insira a conta destino:");
+					int contaDestino = 0;
+					contaDestino = scanner.nextInt();
+					double quantia = 0.0;
+					System.out.println("Insira o valor a ser transferido:");
+					quantia = scanner.nextDouble();
+					contaDao.transferencia(quantia, contaOrigem, contaDestino);
+					System.out.println("Transferência realizada!");
 					
 					break;
 					
@@ -225,6 +214,8 @@ public class Application {
 				
 				for(String Lista : clientes) {
 					System.out.println(Lista);
+					
+					break;
 				}
 				
 				

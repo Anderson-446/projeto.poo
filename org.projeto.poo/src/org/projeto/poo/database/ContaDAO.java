@@ -184,4 +184,95 @@ public class ContaDAO {
 		return listContas;
 	}
 	
+	public boolean deposito (int numeroConta, double valor) {
+		
+		String sql = "UPDATE contas SET saldo = saldo + ? WHERE numeroConta = ?;";
+		
+		try {
+			
+			PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+			pstm.setDouble(1, valor);
+			pstm.setInt(2, numeroConta);
+			pstm.executeUpdate();
+			return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+
+	public boolean saque (int numeroConta, double valor) {
+		
+		String sql = "UPDATE contas SET saldo = saldo - ? WHERE numeroConta = ?;";
+		
+		try {
+			
+			PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+			pstm.setDouble(1, valor);
+			pstm.setInt(2, numeroConta);
+			pstm.executeUpdate();
+			return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
+	public void transferencia (double valor, int contaOrigem, int contaDestino) {
+		
+		String minusSql = "UPDATE contas SET saldo = saldo - ? WHERE numeroConta = ?;";
+		String plusSql = "UPDATE contas SET saldo = saldo + ? WHERE numeroConta = ?;";
+		
+
+		try {
+			
+			PreparedStatement minusPstm = conn.getConnection().prepareStatement(minusSql);
+			minusPstm.setDouble(1, valor);
+			minusPstm.setInt(2, contaOrigem);
+			minusPstm.executeUpdate();
+			
+			//acredito que seja apenas aqui para multiplicar e diminuir o valor, dependendo da conta
+			PreparedStatement plusPstm = conn.getConnection().prepareStatement(plusSql);
+			plusPstm.setDouble(1, valor);
+			plusPstm.setInt(2, contaDestino);
+			plusPstm.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void balanco(Cliente cliente) {
+		
+		String sql = "SELECT SUM(saldo) AS total FROM contas WHERE clientes_cpf = ?;";
+		//é criada uma tabela com o nome de total que armazena a soma da coluna saldo
+		ResultSet rs;
+		
+		try {
+			
+			PreparedStatement pstm = conn.getConnection().prepareStatement(sql);
+			pstm.setString(1, cliente.getCpf());
+			
+			rs = pstm.executeQuery();
+			if(rs.next()) {
+				double total = rs.getDouble("total");
+				System.out.println("Balanço total:" + total);
+			} else {
+				System.out.println("Error: estamos trabalhando neste quesito.");
+			}
+			
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+	
 }
