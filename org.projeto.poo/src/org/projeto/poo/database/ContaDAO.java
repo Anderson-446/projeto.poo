@@ -226,7 +226,7 @@ public class ContaDAO {
 		
 		String minusSql = "UPDATE contas SET saldo = saldo - ? WHERE numeroConta = ?;";
 		String plusSql = "UPDATE contas SET saldo = saldo + ? WHERE numeroConta = ?;";
-		
+		ResultSet rs;
 
 		try {
 			
@@ -234,6 +234,23 @@ public class ContaDAO {
 			minusPstm.setDouble(1, valor);
 			minusPstm.setInt(2, contaOrigem);
 			minusPstm.executeUpdate();
+			
+			// Verificar o tipo da conta de origem
+			String tipoSql = "SELECT tipo FROM contas WHERE numeroConta = ?;";
+			PreparedStatement tipoPstm = conn.getConnection().prepareStatement(tipoSql);
+			tipoPstm.setInt(1, contaOrigem);
+			rs = tipoPstm.executeQuery();
+			
+			if(rs.next()) {
+				String tipoConta = rs.getString("tipo");
+				
+				//Verificando se o tipo da conta de origem é "poupança"
+				if("poupanca".equalsIgnoreCase(tipoConta)) {
+					valor = valor - (valor * 0.05); // aplicando taxa diferente
+				} else {
+					valor = valor - (valor * 0.03);
+				}
+			}
 			
 			//acredito que seja apenas aqui para multiplicar e diminuir o valor, dependendo da conta
 			PreparedStatement plusPstm = conn.getConnection().prepareStatement(plusSql);
@@ -262,7 +279,7 @@ public class ContaDAO {
 			rs = pstm.executeQuery();
 			if(rs.next()) {
 				double total = rs.getDouble("total");
-				System.out.println("Balanço total:" + total);
+				System.out.println("Balanço total: R$" + total);
 			} else {
 				System.out.println("Error: estamos trabalhando neste quesito.");
 			}

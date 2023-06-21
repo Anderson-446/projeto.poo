@@ -106,7 +106,7 @@ public class Application {
 					default:
 						
 						System.err.println("Operação inválida");
-						
+						break;
 					}
 					
 					
@@ -178,11 +178,7 @@ public class Application {
 					valor2 = scanner.nextDouble();
 					contaDao.saque(numeroConta2, valor2);
 					System.out.println("Saque realizado com sucesso!");
-					break;
-					
-				default:
-					System.err.println("Opção Inválida");
-					
+					break;	
 					
 				case 5:  //transferir
 					
@@ -205,8 +201,13 @@ public class Application {
 					
 					clienteDao.delete(cli);
 					
-					break;	
+					break;
+					
+				default:
+					System.err.println("Opção Inválida");	
 				}
+				
+				break;
 				
 			case 3: //Listar todos os clientes
 				
@@ -214,19 +215,20 @@ public class Application {
 				
 				for(String Lista : clientes) {
 					System.out.println(Lista);
-					
-					break;
 				}
 				
+				break;
 				
 			case 4:
 				System.out.println("Até mais ver");
 				System.exit(0);
+				break;
 				
 			default:
 				System.out.println("Opção inválida");
+				
 				break;
-			}	
+			}
 		}
 	}
 }
